@@ -10,8 +10,9 @@ struct ml::KNN::Impl {
 ml::KNN::KNN () : pimpl(new ml::KNN::Impl) {}
 ml::KNN::~KNN () {}
 
-void ml::KNN::train (const std::string data_path) {
+void ml::KNN::train (const std::vector<Classified<float>> data) {
 };
 
-std::vector<float> ml::KNN::classify (const std::vector<float> unclassified) const {
+ml::Classified<float>  ml::KNN::classify (const Unclassified<float> unclassified) const {
+	return Classified<float>("test", { 0.0 });
 };

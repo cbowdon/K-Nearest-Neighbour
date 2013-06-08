@@ -4,8 +4,7 @@
 #include <memory>
 #include <string>
 #include <vector>
-
-using namespace std;
+#include "Classified.hpp"
 
 namespace ml {
 
@@ -15,12 +14,12 @@ namespace ml {
 			KNN ();
 			~KNN ();
 		
-			vector<float> classify (const vector<float> unclassified) const;
-			void train (const string data_path);
+			Classified<float> classify (const Unclassified<float> unclassified) const;
+			void train (const std::vector<Classified<float>> classified);
 
 		private:
 			struct Impl;
-			unique_ptr<Impl> pimpl;
+			std::unique_ptr<Impl> pimpl;
 	};
 }
 
