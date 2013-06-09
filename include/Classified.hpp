@@ -9,7 +9,7 @@ namespace ml {
 	template<class T>
 		struct Unclassified {
 
-			Unclassified (std::vector<T> points) : data(points) {}
+			Unclassified (const std::vector<T>& points) : data(points) {}
 
 			const std::vector<T> data;
 		};
@@ -17,7 +17,11 @@ namespace ml {
 	template<class T>
 		struct Classified {
 
-			Classified (std::string name, std::vector<T> points) : label(name), data(points) {}
+			Classified () = default;
+			Classified<T> (const Classified<T>& c) = default;
+			Classified<T>& operator=(const Classified<T>& c) = default;
+
+			Classified (const std::string& name, const std::vector<T>& points) : label(name), data(points) {}
 
 			const std::string label;
 			const std::vector<T> data;
@@ -36,7 +40,7 @@ namespace ml {
 	template<class T>
 		std::ostream& operator<< (std::ostream &ostr, const Unclassified<T> &unclassified) {
 
-			ostr << unclassified.label << " { ";
+			ostr << " { ";
 			std::copy(begin(unclassified.data), end(unclassified.data), std::ostream_iterator<T>(ostr, " "));
 			ostr << "}";
 

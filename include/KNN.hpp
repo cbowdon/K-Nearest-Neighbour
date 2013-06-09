@@ -6,6 +6,9 @@
 #include <vector>
 #include "Classified.hpp"
 
+typedef ml::Classified<float> Cf;
+typedef ml::Unclassified<float> Uf;
+
 namespace ml {
 
 	class KNN {
@@ -13,9 +16,9 @@ namespace ml {
 		public:
 			KNN ();
 			~KNN ();
-		
-			Classified<float> classify (const Unclassified<float> unclassified) const;
-			void train (const std::vector<Classified<float>> classified);
+
+			void train (const std::vector<Cf>& classified);
+			const Cf classify (const Uf& unclassified, const size_t k) const;
 
 		private:
 			struct Impl;

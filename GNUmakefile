@@ -18,3 +18,6 @@ all: $(MAIN) $(ASSEMBLIES)
 
 run: all
 	./a.out
+
+clean:
+	rm *.o a.out
