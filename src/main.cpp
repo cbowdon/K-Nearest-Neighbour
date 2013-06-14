@@ -16,15 +16,18 @@ int main (int argc, char** argv) {
 	const vector<Cf> classified = csv::load_classified<float>(training_data);
 	const vector<Uf> unclassified = csv::load_unclassified<float>(test_data);
 
-	vector<Cf> results(unclassified.size());
+	vector<Cf> results;
 
 	ml::KNN knn;
 
 	knn.train(classified);
 
-	const function<Cf(Uf)> cl = [&knn, &k](const Uf& u) { return knn.classify(u, k); };
-
-	transform(begin(unclassified), end(unclassified), begin(results), cl);
+//	for (auto u : unclassified) {
+//		auto c = knn.classify(u, k);
+//		cout << c << endl;
+//		results.push_back(c);
+//	}
+	knn.classify(unclassified[0], k);
 
 	return EXIT_SUCCESS;
 }

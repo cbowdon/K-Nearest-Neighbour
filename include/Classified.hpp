@@ -17,10 +17,6 @@ namespace ml {
 	template<class T>
 		struct Classified {
 
-			Classified () = default;
-			Classified<T> (const Classified<T>& c) = default;
-			Classified<T>& operator=(const Classified<T>& c) = default;
-
 			Classified (const std::string& name, const std::vector<T>& points) : label(name), data(points) {}
 
 			const std::string label;
