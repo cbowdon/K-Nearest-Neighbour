@@ -13,8 +13,8 @@ int main (int argc, char** argv) {
 	const string test_data = argc > 2 ? argv[2] : "data/unclassified.csv";
 	const size_t k = argc > 3 ? stoul(argv[3]) : 5;
 
-	const vector<Cf> classified = csv::load_classified<float>(training_data);
-	const vector<Uf> unclassified = csv::load_unclassified<float>(test_data);
+	const auto classified = csv::load_classified<float>(training_data);
+	const auto unclassified = csv::load_unclassified<float>(test_data);
 
 	vector<Cf> results;
 
