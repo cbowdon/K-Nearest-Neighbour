@@ -12,6 +12,7 @@ typedef std::vector<float> vecFlo;
 typedef std::pair<size_t, float> pair;
 typedef std::vector<pair> vecPair;
 typedef std::vector<size_t> vecSizeT;
+typedef std::pair<std::string, size_t> wordCount;
 
 //**********
 // KNN::Impl
@@ -31,14 +32,17 @@ void ml::KNN::Impl::train (const std::vector<Cf>& input) {
 
 	size_t dimensions = input[0].data.size();
 
-	std::for_each(begin(input), end(input), [this, &dimensions](const Classified<float>& i) { 
+	const auto build = [this, &dimensions](const Cf& i) {
 		assert(dimensions == i.data.size());
 		data.push_back(i); 
-	});
+	};
+	std::for_each(begin(input), end(input), build);
 }
 
 const Cf ml::KNN::Impl::classify (const Uf& unclassified, const size_t k) {
 	assert(data.size() > 0);
+
+	// TODO refactor into smaller methods
 
 	// Get indices
 	vecSizeT indices(data.size());
@@ -50,24 +54,29 @@ const Cf ml::KNN::Impl::classify (const Uf& unclassified, const size_t k) {
 		return std::make_pair(i, euclidean_distance(unclassified.data, cf.data));
 	});
 
-	// Sort to find smallest k
+	// Partial sort to find smallest k
 	auto middle = begin(euclidean_distances);
 	middle += k;
-	const auto compare = [](const pair& p0, const pair& p1) { return std::get<1>(p0) < std::get<1>(p1); };
-	std::partial_sort(begin(euclidean_distances), middle, end(euclidean_distances), compare);
+	const auto comp_dists = [](const pair& p0, const pair& p1) { return std::get<1>(p0) < std::get<1>(p1); };
+	std::partial_sort(begin(euclidean_distances), middle, end(euclidean_distances), comp_dists);
 
 	// Find modal
-	std::cout << "Unclassified: " << unclassified << std::endl;
 	std::unordered_map<std::string, size_t> counts;
-	std::for_each(begin(euclidean_distances), middle, [this, &counts](const pair& p) {
-		std::cout << std::get<1>(p) << "\t" << data[std::get<0>(p)] << std::endl;
+	const auto count_occurs = [this, &counts](const pair& p) {
 		size_t index = std::get<0>(p);
 		Cf cf = data[index];
-		counts.insert(std::make_pair(cf.label, 0));
-	});
+		++counts[data[index].label];
+	};
+	std::for_each(begin(euclidean_distances), middle, count_occurs);
 
+	const auto comp_counts = [](const wordCount& kv0, const wordCount& kv1) {
+		return std::get<1>(kv0) < std::get<1>(kv1);
+	};
+	const auto it_max = std::max_element(begin(counts), end(counts), comp_counts);
 
-	return Cf("test", { 0.0 });
+	const auto top_label = std::get<0>(*it_max);
+
+	return Cf(top_label, unclassified.data);
 }
 
 const float ml::KNN::Impl::euclidean_distance (const vecFlo& pt0, const vecFlo& pt1) const {

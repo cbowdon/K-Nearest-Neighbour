@@ -22,12 +22,11 @@ int main (int argc, char** argv) {
 
 	knn.train(classified);
 
-//	for (auto u : unclassified) {
-//		auto c = knn.classify(u, k);
-//		cout << c << endl;
-//		results.push_back(c);
-//	}
-	knn.classify(unclassified[0], k);
+	for (auto u : unclassified) {
+		auto c = knn.classify(u, k);
+		cout << c << endl;
+		results.push_back(c);
+	}
 
 	return EXIT_SUCCESS;
 }
