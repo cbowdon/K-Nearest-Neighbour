@@ -16,8 +16,7 @@ This was straightforward, lots of use of the algorithm standard library. The pro
 
 I added two optimization to the above:
 + Skipped the square root in calculating the Euclidean distance - no effect on the sorting, but saves N square root calculations.
-+ Used partial sort rather than a full sort, since we don't care about the ordering of anything outside of the K closest points.
++ Used nth element rather than a full sort, since we don't care about the ordering beyond whether or not the point is among the K closest.
 
-Two further optimizations to implement:
-+ Nth element would be an even better choice than partial sort if K is large, since we don't really care about the ordering of the K closest points either.
-+ It might be useful to weight the K nearest neighbours according to their distance.
+Potential future optimizations:
++ It might be useful to weight the K nearest neighbours according to their distance - if there is a tight cluster of type A right on top of the unclassified element, but the K closest contains lots of type B, this would help the correct classification as A.

@@ -58,7 +58,7 @@ const Cf ml::KNN::Impl::classify (const Uf& unclassified, const size_t k) {
 	auto middle = begin(euclidean_distances);
 	middle += k;
 	const auto comp_dists = [](const pair& p0, const pair& p1) { return std::get<1>(p0) < std::get<1>(p1); };
-	std::partial_sort(begin(euclidean_distances), middle, end(euclidean_distances), comp_dists);
+	std::nth_element(begin(euclidean_distances), middle, end(euclidean_distances), comp_dists);
 
 	// Find modal
 	std::unordered_map<std::string, size_t> counts;
